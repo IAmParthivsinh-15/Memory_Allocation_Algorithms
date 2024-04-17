@@ -326,8 +326,12 @@
           }
         }
 
+        console.log(winner);
+
         const winnerIndex = objects.indexOf(winner);
+        console.log(winnerIndex);
         const winnerType = algorithms[winnerIndex];
+        console.log(winnerType);
 
         document.getElementById("winner").innerText = winnerType;
       }
@@ -428,9 +432,6 @@
               // console.log(line);
               proccesingArray.push(line);
 
-              // for printing
-              // const ffHTML = document.getElementById("ff1");
-              // ffHTML.textContent = line;
               allocatedProcessesExe.push(processSizes[i]);
               break;
             } else {
@@ -469,7 +470,6 @@
         ff.MiH = min_hole;
         ff.NAP = updatedNonAllocatedProcessesExe;
         ff.TFS = total_free_memory;
-        console.log("PRO ARRAY : ", proccesingArray);
         eachExecution(
           memorySizes2,
           proccesingArray,
@@ -500,10 +500,7 @@
                 const value = memorySizes[i];
                 line += value + " | ";
               }
-              console.log(line);
               proccesingArray.push(line);
-              // const nfHTML = document.getElementById("nf1");
-              // nfHTML.textContent = line;
               allocatedProcessesExe.push(processSizes[i]);
               break;
             } else {
@@ -517,7 +514,6 @@
           allocatedProcessesExe,
           nonAllocatedProcessesExe
         );
-        console.log(updatedNonAllocatedProcessesExe);
         const max_hole = Math.max(...memorySizes);
         const min_hole = Math.min(...memorySizes);
 
@@ -525,7 +521,6 @@
           (accumulator, curr) => accumulator + curr,
           0
         );
-        console.log(max_hole, min_hole, total_free_memory);
 
         const nfMaxHoleElement = document.getElementById("nfMaxHole");
         const nfMinHoleElement = document.getElementById("nfMinHole");
@@ -542,7 +537,6 @@
         nf.MiH = min_hole;
         nf.NAP = updatedNonAllocatedProcessesExe;
         nf.TFS = total_free_memory;
-        console.log("PRO ARRAY : ", proccesingArray);
         eachExecution(
           memorySizes2,
           proccesingArray,
@@ -584,7 +578,6 @@
               const value = memorySizes[i];
               line += value + " | ";
             }
-            console.log(line);
 
             proccesingArray.push(line);
           } else {
@@ -592,7 +585,6 @@
           }
         }
 
-        console.log(memorySizes);
         const updatedNonAllocatedProcessesExe = removeAllocatedFromNonAllocated(
           allocatedProcessesExe,
           nonAllocatedProcessesExe
@@ -605,7 +597,6 @@
           (accumulator, curr) => accumulator + curr,
           0
         );
-        console.log(max_hole, min_hole, total_free_memory);
 
         const bfMaxHoleElement = document.getElementById("bfMaxHole");
         const bfMinHoleElement = document.getElementById("bfMinHole");
@@ -622,8 +613,6 @@
         bf.MiH = min_hole;
         bf.NAP = updatedNonAllocatedProcessesExe;
         bf.TFS = total_free_memory;
-
-        console.log("PRO ARRAY : ", proccesingArray);
 
         eachExecution(
           memorySizes2,
@@ -673,12 +662,10 @@
             nonAllocatedProcessesExe.push(processSizes[i]);
           }
         }
-        console.log(memorySizes);
         const updatedNonAllocatedProcessesExe = removeAllocatedFromNonAllocated(
           allocatedProcessesExe,
           nonAllocatedProcessesExe
         );
-        console.log(updatedNonAllocatedProcessesExe);
         const max_hole = Math.max(...memorySizes);
         const min_hole = Math.min(...memorySizes);
 
@@ -686,7 +673,6 @@
           (accumulator, curr) => accumulator + curr,
           0
         );
-        console.log(max_hole, min_hole, total_free_memory);
 
         const wfMaxHoleElement = document.getElementById("wfMaxHole");
         const wfMinHoleElement = document.getElementById("wfMinHole");
@@ -703,8 +689,6 @@
         wf.MiH = min_hole;
         wf.NAP = updatedNonAllocatedProcessesExe;
         wf.TFS = total_free_memory;
-
-        console.log("PRO ARRAY : ", proccesingArray);
 
         eachExecution(
           memorySizes2,
