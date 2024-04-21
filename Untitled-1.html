@@ -213,6 +213,8 @@
         bestFit();
         worstFit();
         findWinner();
+        memoryValues.length = 0;
+        valueValues.length = 0;
       }
 
       function addMemoryInputs() {
@@ -283,57 +285,54 @@
 
       function findWinner() {
         const algorithms = ["First Fit", "Worst Fit", "Next Fit", "Best Fit"];
-
         const objects = [ff, wf, nf, bf];
 
         const minNAPSize = Math.min(...objects.map((obj) => obj.NAP.length));
-
-        console.log("minNAPSize : ", minNAPSize);
-
         const minNAPObjects = objects.filter(
           (obj) => obj.NAP.length === minNAPSize
         );
 
-        console.log("minNAPObjects : ", minNAPObjects);
-
-        let winner;
-
         if (minNAPObjects.length === 1) {
-          winner = minNAPObjects[0];
+          const winner = minNAPObjects[0];
+          const winnerIndex = objects.indexOf(winner);
+          const winnerType = algorithms[winnerIndex];
+          document.getElementById("winner").innerText = winnerType;
         } else {
-          const maxMaH = Math.max(...objects.map((obj) => obj.MaH));
-          console.log("MaxMah : ", maxMaH);
-          const maxMaHObjects = objects.filter((obj) => obj.MaH === maxMaH);
-          console.log(maxMaHObjects);
-          if (maxMaHObjects === 1) {
-            winner = maxMaHObjects[0];
-          } else {
-            const minMiH = Math.min(...objects.map((obj) => obj.MiH));
-            console.log("minMiH : ", minMiH);
-            const minMiHObjects = objects.filter((obj) => obj.MiH === minMiH);
-            console.log(minMiHObjects);
-            if (minMiHObjects === 1) {
-              winner = minMiHObjects[0];
-            } else {
-              for (let i = 0; i < minMiHObjects.length; i++) {
-                const div = document.createElement("div");
-                div.innerHTML = minMiHObjects[i];
-                const win = document.getElementById("winner");
-                win.appendChild(div);
-              }
-              return;
+          let winners = minNAPObjects;
+          let winnerCriteria = "minimum NAP";
+
+          const maxMaH = Math.max(...winners.map((obj) => obj.MaH));
+          if (maxMaH > 0) {
+            winners = winners.filter((obj) => obj.MaH === maxMaH);
+            winnerCriteria = "maximum hole size";
+          }
+
+          if (winners.length > 1) {
+            const minMiH = Math.min(...winners.map((obj) => obj.MiH));
+            if (minMiH > 0) {
+              winners = winners.filter((obj) => obj.MiH === minMiH);
+              winnerCriteria = "minimum hole size";
             }
           }
+
+          if (winners.length > 1) {
+            const maxTFS = Math.max(...winners.map((obj) => obj.TFS));
+            winners = winners.filter((obj) => obj.TFS === maxTFS);
+            winnerCriteria = " total free memory";
+          }
+
+          if (winners.length > 1) {
+            const winnerNames = winners.map(
+              (obj) => algorithms[objects.indexOf(obj)]
+            );
+            document.getElementById("winner").innerText =
+              winnerNames.join(", ") + " based on " + winnerCriteria;
+          } else {
+            const winnerType = algorithms[objects.indexOf(winners[0])];
+            document.getElementById("winner").innerText =
+              winnerType + " based on " + winnerCriteria;
+          }
         }
-
-        console.log(winner);
-
-        const winnerIndex = objects.indexOf(winner);
-        console.log(winnerIndex);
-        const winnerType = algorithms[winnerIndex];
-        console.log(winnerType);
-
-        document.getElementById("winner").innerText = winnerType;
       }
 
       function eachExecution(
@@ -373,7 +372,6 @@
           const rowDiv = document.createElement("div");
           rowDiv.classList.add("flex", "flex-row");
 
-          // Add label for process size from processSizes array
           const labelDiv = document.createElement("div");
           labelDiv.classList.add("m-2", "font-semibold");
           labelDiv.innerHTML =
@@ -429,6 +427,8 @@
                 const value = memorySizes[i];
                 line += value + " | ";
               }
+              // 100 500 200 300 600
+              // 100 | 288 | 200 | 300 | 600
               // console.log(line);
               proccesingArray.push(line);
 
@@ -490,21 +490,27 @@
 
         let lastIndex = 0;
         for (let i = 0; i < processSizes.length; i++) {
-          for (let j = lastIndex; j < memorySizes.length; j++) {
+          let j = lastIndex;
+          let found = false;
+          while (!found) {
             if (memorySizes[j] >= processSizes[i]) {
               allocation[i] = j;
               memorySizes[j] -= processSizes[i];
               lastIndex = j;
               let line = "";
-              for (let i = 0; i < memorySizes.length; i++) {
-                const value = memorySizes[i];
+              for (let k = 0; k < memorySizes.length; k++) {
+                const value = memorySizes[k];
                 line += value + " | ";
               }
               proccesingArray.push(line);
               allocatedProcessesExe.push(processSizes[i]);
-              break;
+              found = true;
             } else {
-              nonAllocatedProcessesExe.push(processSizes[i]);
+              j = (j + 1) % memorySizes.length;
+              if (j === lastIndex) {
+                nonAllocatedProcessesExe.push(processSizes[i]);
+                break;
+              }
             }
           }
         }
@@ -545,6 +551,73 @@
           "nf2"
         );
       }
+
+      // function nextFit() {
+      //   let memorySizes = [...memoryValues];
+      //   let memorySizes2 = [...memoryValues];
+      //   let processSizes = [...valueValues];
+      //   let allocation = new Array(processSizes.length).fill(-1);
+      //   let nonAllocatedProcessesExe = [];
+      //   let allocatedProcessesExe = [];
+      //   let proccesingArray = [];
+
+      //   let lastIndex = 0;
+      //   for (let i = 0; i < processSizes.length; i++) {
+      //     for (let j = lastIndex; j < memorySizes.length; j++) {
+      //       if (memorySizes[j] >= processSizes[i]) {
+      //         allocation[i] = j;
+      //         memorySizes[j] -= processSizes[i];
+      //         lastIndex = j;
+      //         let line = "";
+      //         for (let i = 0; i < memorySizes.length; i++) {
+      //           const value = memorySizes[i];
+      //           line += value + " | ";
+      //         }
+      //         proccesingArray.push(line);
+      //         allocatedProcessesExe.push(processSizes[i]);
+      //         break;
+      //       } else {
+      //         nonAllocatedProcessesExe.push(processSizes[i]);
+      //       }
+      //     }
+      //   }
+
+      //   console.log(memorySizes);
+      //   const updatedNonAllocatedProcessesExe = removeAllocatedFromNonAllocated(
+      //     allocatedProcessesExe,
+      //     nonAllocatedProcessesExe
+      //   );
+      //   const max_hole = Math.max(...memorySizes);
+      //   const min_hole = Math.min(...memorySizes);
+
+      //   const total_free_memory = memorySizes.reduce(
+      //     (accumulator, curr) => accumulator + curr,
+      //     0
+      //   );
+
+      //   const nfMaxHoleElement = document.getElementById("nfMaxHole");
+      //   const nfMinHoleElement = document.getElementById("nfMinHole");
+      //   const nfNAProcessesElement = document.getElementById("nfNAProcesses");
+      //   const nfFreeMemoryElement = document.getElementById("nfFreeMemory");
+
+      //   nfMaxHoleElement.textContent = max_hole;
+      //   nfMinHoleElement.textContent = min_hole;
+      //   nfNAProcessesElement.textContent =
+      //     updatedNonAllocatedProcessesExe.join(", ");
+      //   nfFreeMemoryElement.textContent = total_free_memory;
+
+      //   nf.MaH = max_hole;
+      //   nf.MiH = min_hole;
+      //   nf.NAP = updatedNonAllocatedProcessesExe;
+      //   nf.TFS = total_free_memory;
+      //   eachExecution(
+      //     memorySizes2,
+      //     proccesingArray,
+      //     processSizes,
+      //     "nf1",
+      //     "nf2"
+      //   );
+      // }
 
       function bestFit() {
         let memorySizes = [...memoryValues];
