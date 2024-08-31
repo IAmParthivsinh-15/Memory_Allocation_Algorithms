@@ -2,6 +2,18 @@
 
 This project demonstrates various memory allocation algorithms commonly used in operating systems, including First Fit, Next Fit, Best Fit, and Worst Fit. The project is built using HTML, CSS, and JavaScript to create an interactive interface where users can visualize and compare the different algorithms.
 
+### Project Overview
+
+### User Input 
+![image](https://github.com/user-attachments/assets/4d263c9a-2b91-4650-a64b-93377488a82b)
+
+### Remaining Free Spaces After Each Iterations
+![image](https://github.com/user-attachments/assets/6188ba04-f9e6-429d-90b8-3b2240dabf5b)
+
+### Final Output
+![image](https://github.com/user-attachments/assets/793e2070-3b11-48d6-b96d-5f01d2c4d19d)
+
+
 ## Features
 
 - *First Fit*: Allocates the first available memory block that is large enough to accommodate the process.
@@ -13,7 +25,7 @@ This project demonstrates various memory allocation algorithms commonly used in 
 
 ## Tech Stack
 
-- *Frontend*: HTML, CSS, JavaScript
+- *Frontend*: HTML, Taileind CSS, JavaScript
 
 ## How It Works
 
